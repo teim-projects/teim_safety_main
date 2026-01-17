@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import Footer from ".//Footer";
+import { API_BASE_URL } from "../config/api";
+
 const MachineDetectionView = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,14 +28,16 @@ const handleSubmit = async (e) => {
     setLoading(true);
 
     const res = await axios.post(
-      "http://localhost:8000/predict_machine/",
-      formData,
-      { headers: { "Content-Type": "multipart/form-data" } }
-    );
+  `${API_BASE_URL}/predict_machine/`,
+  formData,
+  { headers: { "Content-Type": "multipart/form-data" } }
+);
+
 
     const data = res.data;
-    if (data.original) setOriginalVideo("http://localhost:8000" + data.original);
-    if (data.annotated) setAnnotatedVideo("http://localhost:8000" + data.annotated);
+    if (data.original) setOriginalVideo(`${API_BASE_URL}${data.original}`);
+if (data.annotated) setAnnotatedVideo(`${API_BASE_URL}${data.annotated}`);
+
     if (data.checkpoints) setCheckpoints(data.checkpoints);
 
   } catch (err) {

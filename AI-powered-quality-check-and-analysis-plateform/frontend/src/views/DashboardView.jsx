@@ -1,5 +1,7 @@
 // src/views/DashboardView.jsx
 import React, { useEffect, useState } from "react";
+import { API_BASE_URL } from "../config/api";
+
 import { Bar, Pie, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -40,7 +42,8 @@ const DashboardView = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("http://127.0.0.1:8000/api/dashboard");
+      const res = await fetch(`${API_BASE_URL}/api/dashboard`);
+
       const data = await res.json();
       setClassSummary(data.class_summary || []);
       setCheckpointSummary(data.checkpoint_summary || []);

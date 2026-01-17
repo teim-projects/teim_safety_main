@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from ".//Footer";
+import { API_BASE_URL } from "../config/api";
+
+
 const LoginView = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +30,8 @@ const LoginView = ({ onLoginSuccess }) => {
 
     try {
       // Send login request to backend
-      const response = await fetch("http://127.0.0.1:8000/api/login", {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

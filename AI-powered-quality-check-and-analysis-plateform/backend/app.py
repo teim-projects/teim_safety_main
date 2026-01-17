@@ -4,11 +4,10 @@ from fastapi.staticfiles import StaticFiles
 
 from routers import auth, ppe, machine, dashboard, notifications, face_routes
 from db.database import init_db
-# -------------------------------
+
 app = FastAPI(title="PPE Detection + Auth API", version="1.0")
 
-# -------------------------------
-#Initialize db
+# Initialize DB
 init_db()
 
 # CORS
@@ -20,15 +19,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
+# Static files (if used by backend)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Include routers
+# ================= ROUTERS =================
+
+# ✅ AUTH (FIXED)
 app.include_router(auth.router, prefix="/api", tags=["auth"])
+
+# ✅ PPE MODEL
 app.include_router(ppe.router, prefix="/predict", tags=["ppe"])
+
+# ✅ MACHINE MODEL
 app.include_router(machine.router, prefix="/predict_machine", tags=["machine"])
-app.include_router(dashboard.router)
-app.include_router(notifications.router)
+
+# ✅ DASHBOARD + NOTIFICATIONS (they already use /api in frontend)
+app.include_router(dashboard.router, prefix="/api")
+app.include_router(notifications.router, prefix="/api")
+
+# ✅ FACE ROUTES
 app.include_router(face_routes.router, prefix="/face", tags=["face"])
 
 @app.get("/")

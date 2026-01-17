@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { Camera, Image as ImageIcon, Download, Plus } from "lucide-react";
 import axios from "axios";
 import Webcam from "react-webcam";
+import { API_BASE_URL } from "../config/api";
 
 
-const API_ENDPOINT = 'http://127.0.0.1:8000/predict/'; // match backend
+const API_ENDPOINT = `${API_BASE_URL}/predict/`;
+ // match backend
 
 const PPEDetectionView = () => {
   const [file, setFile] = useState(null);
@@ -54,7 +56,8 @@ const [addingFace, setAddingFace] = useState(false);
 
     try {
       setAddingFace(true);
-      await axios.post("http://127.0.0.1:8000/face/add_face/", formData, {
+      await axios.post(`${API_BASE_URL}/face/add_face/`, formData, {
+
         headers: { "Content-Type": "multipart/form-data" }
       });
       alert("Face added successfully!");
@@ -108,7 +111,8 @@ const handleSubmit = async (e) => {
 
     const data = res.data;
     if (data.detected_frames) {
-      setDetectedFrames(data.detected_frames.map(f => `http://127.0.0.1:8000${f}`));
+      setDetectedFrames(data.detected_frames.map(f => `${API_BASE_URL}${f}`));
+
     } else {
       setDetectedFrames([]);
     }
@@ -116,14 +120,16 @@ const handleSubmit = async (e) => {
     setDetections([]);
     setSummary(data.violations || {});
     if (data.is_video && data.uploaded_file) {
-      setOriginalMedia(`http://127.0.0.1:8000${data.uploaded_file}`);
+      setOriginalMedia(`${API_BASE_URL}${data.uploaded_file}`);
+
       setAnnotatedMedia(null);
     } else {
       if (data.original_image) {
-        setOriginalMedia(`http://127.0.0.1:8000${data.original_image}`);
+        setOriginalMedia(`${API_BASE_URL}${data.original_image}`);
+
       }
       if (data.annotated_image) {
-        setAnnotatedMedia(`http://127.0.0.1:8000${data.annotated_image}`);
+        setAnnotatedMedia(`${API_BASE_URL}${data.annotated_image}`);
       }
     }
   } catch (err) {

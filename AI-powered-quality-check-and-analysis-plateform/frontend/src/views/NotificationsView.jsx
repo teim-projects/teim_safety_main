@@ -2,13 +2,16 @@
 import React, { useEffect, useState } from "react";
 import { Bell, AlertTriangle, CheckCircle, X } from "lucide-react";
 import Footer from ".//Footer"; // fixed import path
+import { API_BASE_URL } from "../config/api";
+
 
 const NotificationsView = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const fetchNotifications = async () => {
-      const res = await fetch("http://127.0.0.1:8000/api/notifications");
+      const res = await fetch(`${API_BASE_URL}/api/notifications`);
+
       const data = await res.json();
       setNotifications(data);
     };
@@ -18,9 +21,10 @@ const NotificationsView = () => {
   }, []);
 
   const markAsRead = async (id) => {
-    await fetch(`http://127.0.0.1:8000/api/notifications/${id}/read`, {
-      method: "POST",
-    });
+    await fetch(`${API_BASE_URL}/api/notifications/${id}/read`, {
+  method: "POST",
+});
+
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
